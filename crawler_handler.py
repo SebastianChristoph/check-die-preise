@@ -2,7 +2,7 @@
 import time
 import re
 import os
-from datetime import datetime, timedelta
+from datetime import datetime
 import json
 import paramiko
 import requests
@@ -11,7 +11,6 @@ try:
     import mapper
 except:
     from . import mapper
-
 
 class CrawlerHandler:
     def __init__(self, store, mapping_cat=mapper.mapping, with_id=False, show_prints=True):
@@ -91,16 +90,6 @@ class CrawlerHandler:
             self.path_to_store_json = "/home/pi/crawler/jsons/" + self.store + ".json"
             self.path_to_log = "/home/pi/crawler/logging/log.json"
         
-        # Laptop
-        # else:
-        #     # local path
-        #     if self.show_prints:
-        #         print("RUNNING LOCALLY LAPTOP")
-          
-            # self.path_to_store_json = "crawler/jsons/" + self.store + ".json"
-            # self.path_to_log = "crawler/logging/log.json"
-           
-
         # method calls
         self.current_date = self.get_current_date()
         self.getting_store_json()
@@ -130,37 +119,6 @@ class CrawlerHandler:
         today = datetime.now()
         return today.strftime("%d-%m-%Y")
 
-    # def get_yesterday_date(self):
-    #     yesterday = datetime.now() - timedelta(days=1)
-    #     return yesterday.strftime("%d-%m-%Y")
-
-    # def add_current_date_to_json(self):
-    #     self.print_message("Adding current date to STORE_JSON")
-    #     for product in self.STORE_JSON["products"]:
-    #         if product["dates"].get(self.current_date) != None:
-    #             pass
-    #         else:
-    #             product["dates"][self.current_date] = "0"
-    #     if self.show_prints:
-    #         print("Done")
-    #     self.print_message(
-    #         "Adding current date to STORE_JSON historical labels")
-    #     if self.current_date not in self.STORE_JSON["historical_labels"]:
-    #         self.STORE_JSON["historical_labels"].append(self.current_date)
-
-    #     if self.show_prints:
-    #         print("Done")
-
-    # def clear_webshop_links_for_all_products(self):
-    #     if self.show_prints:
-    #         self.print_message("Clear WebShop-Link for all " +
-    #                            str(len(self.STORE_JSON["products"])) + " products ...")
-
-    #     for product in self.STORE_JSON["products"]:
-    #         product["original_link"] = "#"
-    #     if self.show_prints:
-    #         print("Done")
-
     def get_all_products_form_JSON(self):
         error_loading_ids = 0
         if self.with_id:
@@ -178,7 +136,7 @@ class CrawlerHandler:
                 print("   Already", len(self.STORE_JSON_CURRENT_IDS),
                       "IDs in json, errors in loading ids:", error_loading_ids)
 
-            # HANDLE PRODUCT NAMES
+        # HANDLE PRODUCT NAMES
         else:
             self.print_message("Getting products from STORE_JSON...")
             for product in self.STORE_JSON["products"]:
@@ -336,8 +294,6 @@ class CrawlerHandler:
         try:
             sftp = ssh.open_sftp()
             path = "/home/SebastianChristoph/mysite/static/crawler/logging/log.json"
-
-            #Raspberry pi
             localpath = "/home/pi/crawler/logging/log.json"
             print("..upload")
             sftp.put(localpath, path)
@@ -484,10 +440,6 @@ class CrawlerHandler:
         response = requests.get("https://data.check-die-preise.de/apilog")
         log_dict = json.loads(response.text)
 
-        # with open(self.path_to_log, "r", encoding="UTF-8") as file:
-        #     content = file.read()
-        #     log_dict = json.loads(content)
-
         log_str =f"{self.store.upper()} finished at {current_time}, took {took_time} [{round(filesize,2)}MB] P: {len(self.STORE_JSON['products'])} Upd: {self.updated} Add: {self.new} No data: {not_touched} ({not_touched_products_percent}%) Outlier: {self.outliers}"
 
         log_dict["crawler_logging"].append(log_str)
@@ -581,5 +533,3 @@ class CrawlerHandler:
 
         self.savelog(formatted_time, not_touched_products, not_touched_products_percent)
         print("\n\n")
-
-
