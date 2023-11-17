@@ -209,7 +209,7 @@ class CrawlerHandler:
 
     def clean_name(self, name):
 
-        forbidden_characters = ["%", "|", '"', "&", "\\", "/", "#"]
+        forbidden_characters = ["|", '"', "\\", "/"]
 
         for char in forbidden_characters:
             name = name.replace(char, "")
@@ -362,6 +362,10 @@ class CrawlerHandler:
 
                         # update category
                         product_in_json["category"] = cat
+
+                        
+                        # update name
+                        product_in_json["name"] = name
 
                         # HAT BEREITS EINTRAG VON HEUTE?
                         if product_in_json["price_changes"][-1]["date"] == self.get_current_date():

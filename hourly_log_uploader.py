@@ -21,7 +21,7 @@ def upload_log(log_file_name):
         print("Connected for", log_file_name)
         try:
             sftp = ssh.open_sftp()
-            path = "/home/SebastianChristoph/mysite/static/crawler/logging/crawlerlog_"+log_file_name+".txt"
+            path = "/home/SebastianChristoph/mysite/static/crawler/logging/crawlerlog_"+log_file_name
             localpath = "/home/pi/crawlerlog_"+log_file_name
             sftp.put(localpath, path)
             sftp.close()
@@ -40,3 +40,4 @@ for log in logs_to_clean:
      print(current_time, "uploaded", log)
      print("__________________________")
 print("Finished")
+print("##################################################################")
