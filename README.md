@@ -44,16 +44,18 @@ Die Jsons der jeweiligen Stores weisen folgendes Format auf:
         "imageURL": "www.",
         "name": "product name",
         "original_link": "wbeshop link",
-        "price_changes": [{
-            "date": "29-10-2023",
-            "price_bulk": "14.50",
-            "price_single": "1.45"
-        },
-        {
-            "date": "31-10-2023",
-            "price_bulk": "14.50",
-            "price_single": "1.50"
-        }],
+        "price_changes": [
+            {
+                "date": "29-10-2023",
+                "price_bulk": "14.50",
+                "price_single": "1.45"
+            },
+            {
+                "date": "31-10-2023",
+                "price_bulk": "14.50",
+                "price_single": "1.50"
+            }
+        ],
     }]
 }
 ```
