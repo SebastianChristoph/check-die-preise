@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 import json
 import paramiko
 import requests
-
+import secret
 try:
     import mapper
 except:
@@ -85,20 +85,20 @@ class CrawlerHandler:
             self.path_to_log = "/home/SebastianChristoph/mysite/static/crawler/logging/log.json"
         
         #Raspberry pi
-        elif "home/pi" in cwd:
+        else:
             if self.show_prints:
-                print("RUNNING LOCALLY RASPI")
+                print("RUNNING LOCALLY RASPBERRY")
             self.path_to_store_json = "/home/pi/crawler/jsons/" + self.store + ".json"
             self.path_to_log = "/home/pi/crawler/logging/log.json"
         
         # Laptop
-        else:
-            # local path
-            if self.show_prints:
-                print("RUNNING LOCALLY LAPTOP")
+        # else:
+        #     # local path
+        #     if self.show_prints:
+        #         print("RUNNING LOCALLY LAPTOP")
           
-            self.path_to_store_json = "crawler/jsons/" + self.store + ".json"
-            self.path_to_log = "crawler/logging/log.json"
+            # self.path_to_store_json = "crawler/jsons/" + self.store + ".json"
+            # self.path_to_log = "crawler/logging/log.json"
            
 
         # method calls
@@ -322,12 +322,11 @@ class CrawlerHandler:
             return False
     
     def upload_log_json(self):
-        cwd = os.getcwd()
         print("\nSTART UPLOAD log.json")
         host = "ssh.pythonanywhere.com"
         port = 22
-        password = ".YXbu.83!xP4DTx"
-        username = "SebastianChristoph"
+        password = secret.get_password()
+        username = secret.get_username()
 
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -339,11 +338,7 @@ class CrawlerHandler:
             path = "/home/SebastianChristoph/mysite/static/crawler/logging/log.json"
 
             #Raspberry pi
-            if "home" in cwd:
-                localpath = "/home/pi/crawler/logging/log.json"
-            #Laptop
-            else:
-                localpath ="crawler/logging/log.json"
+            localpath = "/home/pi/crawler/logging/log.json"
             print("..upload")
             sftp.put(localpath, path)
             sftp.close()
@@ -357,12 +352,12 @@ class CrawlerHandler:
         print("UPLOAD log.json SUCCESSFULL")
 
     def upload_json(self):
-        cwd = os.getcwd()
+       
         print("\nSTART UPLOAD store_json")
         host = "ssh.pythonanywhere.com"
         port = 22
-        password = ".YXbu.83!xP4DTx"
-        username = "SebastianChristoph"
+        password = secret.get_password()
+        username = secret.get_username()
 
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -372,12 +367,7 @@ class CrawlerHandler:
         try:
             sftp = ssh.open_sftp()
             path = "/home/SebastianChristoph/mysite/static/crawler/jsons/" + self.store + ".json"
-            #Raspberry pi
-            if "home" in cwd:   
-                localpath = "/home/pi/crawler/jsons/" + self.store + ".json"
-            #Laptop
-            else:
-                localpath = "crawler/jsons/" + self.store + ".json"
+            localpath = "/home/pi/crawler/jsons/" + self.store + ".json"
             print("..upload")
             sftp.put(localpath, path)
             sftp.close()
