@@ -1,4 +1,4 @@
-# check-die-preise
+# check-die-preise.de
 
 ## Crawler
 
@@ -12,10 +12,10 @@ Am Ende wird dem Crawler-Skript immer ein Liste in folgendem Format übergeben:
 ```json
 [
   {
-    "id" : id,
+    "id" : 12345,
     "name" : "product name",
-    "price" : price,
-    "baseprice": bulkPrice,
+    "price" : 14.6,
+    "baseprice":  22.5,
     "unit" : "pro Stk",
     "category" : "Food",
     "original_link" : "link to Webshop",
